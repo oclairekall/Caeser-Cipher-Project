@@ -1,0 +1,103 @@
+import java.util.*;
+import java.lang.Math;
+
+class Main{
+
+	public static int[] encode(String originalMessage, String[] encodekey){
+
+		String encoded = "";
+		int i;
+		int asciiOrig;
+		int asciiShift;
+		int newAscii;
+		//int j = 0;  //don't need
+    int[] encryptedValues = new int[originalMessage.length()];
+
+		for (i=0; i < originalMessage.length(); i++) {
+			char var = originalMessage.charAt(i);
+      asciiOrig = (int)var;
+			
+      if(i <encodekey.length){//no problem if this is the case, now we shift ascii val from key
+      newAscii = asciiOrig + Integer.parseInt(encodekey[i]);; //this is our shifted encoded val
+      }
+      else{
+      newAscii = asciiOrig + Integer.parseInt(encodekey[i% encodekey.length]);
+      }
+
+      encryptedValues[i] = newAscii;
+    }
+  System.out.println(Arrays.toString(encryptedValues));
+
+  return encryptedValues;
+  }
+
+  public static String toString(char[] a){
+  // Creating object of String class
+  String string = new String(a);
+  return string;
+  }
+
+  public static char[] print(int[] encryptedValues){
+  char[] encryptedMessage;
+
+  char[] fixedAscii = new char[encryptedValues.length];
+  String finalMessage = "";
+
+  for(int i = 0; i<encryptedValues.length; i++){
+    
+    if(encryptedValues[i]>126){
+      fixedAscii[i] = (char) (encryptedValues[i ]% 126+ 31);
+    } else if(encryptedValues[i]<32) {
+      fixedAscii[i] = (char) (126 - (31 - encryptedValues[i]));
+
+    }else{
+      fixedAscii[i] = (char) encryptedValues[i];//Sets characters value
+    }
+    finalMessage += fixedAscii[i];
+    
+    
+  }
+  System.out.println(finalMessage);
+  return fixedAscii; 
+  }
+  //encryptedMessage[i] = (char) encryptedValues(i);
+  //System.out.println()
+  // newarray[i] = (char) asciiValues(i);
+
+
+
+	
+  public static void main(String[] args) {
+  boolean continues = true;
+  while(continues==true){
+    //if continues is true it will keep running this program
+
+    Scanner scan = new Scanner(System.in);
+
+    System.out.println("Enter the individual key values (positive or negative integers, one after another in the same line with a blank between two values): ");
+       	String k = scan.nextLine();
+        String[] keyValues = k.split(" ");
+
+       	System.out.println("Enter a string to be encoded: ");
+       	String decodedMessage = scan.nextLine();
+	
+  int[] encryptedValues;
+	encryptedValues = encode(decodedMessage, keyValues);
+	
+
+  System.out.println("The encoded message: ");
+  System.out.println(print(encryptedValues));
+
+  System.out.println("The decoded message:");
+  System.out.println(decodedMessage);
+
+  System.out.println("Do you want to run the program again (y for yes and n for no)?: ");
+  String response = scan.nextLine();
+
+  if(response.equals("n")){
+    continues = false;
+  }
+  }
+  }
+}
+
